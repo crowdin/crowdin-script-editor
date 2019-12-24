@@ -100,6 +100,8 @@ function runButton() {
 
   try {
     jsInterpreter = new Interpreter(src, initAlert);
+    jsInterpreter.REGEXP_MODE = 1;
+    jsInterpreter.REGEXP_THREAD_TIMEOUT = 10000;
 
     var result = jsInterpreter.run();
   } catch(e) {
