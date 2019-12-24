@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Crowdin Script Editor</title>
+  <link href="https://crowdin.com/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+  <link href="app/style.css" rel="stylesheet" type="text/css">
+  <script src="lib/acorn.js"></script>
+  <script src="lib/interpreter.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+  <script src="https://codemirror.net/mode/javascript/javascript.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" />
+
+  <script src="app/index.js"></script>
+</head>
+<body>
+  <div class="grid-container">
+    <div class="Menu">
+      <button onclick="runButton()" title="Run code (Ctry+Y)" >▶️ Run</button>
+      <button onclick="resetEditor()" title="Reset editor (Ctrl+I)">🧹</button>
+
+      <div class="verticalLine"></div>
+
+      <button onclick="copyToClipboard()" >💾 Copy</button>
+
+      <div class="verticalLine"></div>
+
+      <label for="environment">Environment</label>
+      <select name="environment" id="environment">
+        <option value="qa" selected>QA Check</option>
+        <option value="workflow">Workflow Step</option>
+        <option value="pre-processorr">Pre-Import Processor</option>
+        <option value="post-processor">Post-Export Processor</option>
+        <option value="post-processor" disabled>Custom TM/MT</option>
+      </select>
+
+      <div class="verticalLine"></div>
+
+      <label for="samples">Load Sample</label>
+      <select name="samples" id="samples">
+        <optgroup label="QA Checks">
+          <option value="check-simple" selected>Simple</option>
+          <option value="check-regex" disabled>RegEx check</option>
+        </optgroup>
+        <optgroup label="Workflow Steps" disabled>
+          <option value="simplest-workflow" disabled>Simplest Workflow Step</option>
+          <option value="converter-workflow" disabled>Translation Converter</option>
+        </optgroup>
+        <optgroup label="Pre-Processors" disabled>
+          <option value="custom-csv-csv" disabled>Custom CSV -> JSON</option>
+          <option value="custom-md-md" disabled>Custom Markdown -> Markdown</option>
+        </optgroup>
+        <optgroup label="Post-Processors" disabled>
+          <option value="custom-json-csv" disabled>Custom JSON -> CSV</option>
+          <option value="md-custom-md" disabled>Markdown -> Custom Markdow</option>
+        </optgroup>
+      </select>
+
+      <div class="verticalLine"></div>
+
+      <button>📖 Help</button>
+    </div>
+    <div class="Code">
+      <textarea id="code"></textarea>
+    </div>
+    <div class="Request">
+      <div class="sub-menu">
+        Request
+        <span id="request-status"></span>
+      </div>
+      <textarea id="request"></textarea>
+    </div>
+    <div class="Response">
+      <div class="sub-menu">
+        Response
+        <span id="response-status"></span>
+      </div>
+      <textarea id="response"></textarea>
+    </div>
+    <div class="Footer">
+      <span id="time"></span>
+    </div>
+  </div>
+</body>
+</html>
