@@ -25,22 +25,22 @@
 
       <div class="verticalLine"></div>
 
-      <button onclick="copyToClipboard()" >💾 Copy</button>
+      <button onclick="copyToClipboard()" title="Copy the code when ready to deploy">💾 Copy</button>
 
       <div class="verticalLine"></div>
 
-      <label for="environment">Environment</label>
+      <label for="environment" title="Run checks against request, response and the code itself">Environment</label>
       <select name="environment" id="environment">
         <option value="qa" selected>QA Check</option>
-        <option value="workflow">Workflow Step</option>
-        <option value="pre-processorr">Pre-Import Processor</option>
-        <option value="post-processor">Post-Export Processor</option>
+        <option value="workflow" disabled>Workflow Step</option>
+        <option value="pre-processorr" disabled>Pre-Import Processor</option>
+        <option value="post-processor" disabled>Post-Export Processor</option>
         <option value="post-processor" disabled>Custom TM/MT</option>
       </select>
 
       <div class="verticalLine"></div>
 
-      <label for="samples">Load Sample</label>
+      <label for="samples" title="Load sample code to start quickly">Load Sample</label>
       <select name="samples" id="samples">
         <optgroup label="QA Checks">
           <option value="check-simple" selected>Simple</option>
@@ -62,7 +62,7 @@
 
       <div class="verticalLine"></div>
 
-      <button>📖 Help</button>
+      <button title="Read docs or contact Crowdin team for help" disabled>📖 Help</button>
     </div>
     <div class="Code">
       <textarea id="code"></textarea>
