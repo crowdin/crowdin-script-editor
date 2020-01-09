@@ -5,6 +5,10 @@ $(function() {
     loadSample(this.value);
   });
 
+  $("#request-sample").change(function() {
+    loadRequestSample(this.value);
+  });
+
   code = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers: true,
     matchBrackets: true,
@@ -75,15 +79,16 @@ function initAlert(interpreter, scope) {
 
   this.setProperty(myConsole, 'log', this.createNativeFunction(wrapper));
 
-  var wrapper = function() {
-    return request.getValue();
-  };
-  interpreter.setProperty(scope, 'getRequest', interpreter.createNativeFunction(wrapper));
+  try {
+    var crowdinObject = JSON.parse(request.getValue());
+    setRequestStatus();
+  } catch(e) {
+    setRequestStatus();
+  }
 
-  var wrapper = function(text) {
-    response.replaceRange(JSON.stringify(JSON.parse(text), null, 2) + "\r\n", CodeMirror.Pos(response.lastLine()));
-  };
-  interpreter.setProperty(scope, 'sendReply', interpreter.createNativeFunction(wrapper));
+  console.log(crowdinObject);
+
+  interpreter.setProperty(scope, 'crowdin', interpreter.nativeToPseudo(crowdinObject));
 }
 
 function runButton() {
@@ -98,12 +103,29 @@ function runButton() {
     return;
   }
 
+  var lambdaFunction = `
+  (
+      function () {
+          var result = (function () { ` + src +  ` })();
+          
+          if (undefined === result) {
+              return undefined;
+          }
+          
+          return JSON.stringify(result);
+      }
+  )()`;
+
   try {
-    jsInterpreter = new Interpreter(src, initAlert);
-    jsInterpreter.REGEXP_MODE = 2;
+    jsInterpreter = new Interpreter(lambdaFunction, initAlert);
+    jsInterpreter.REGEXP_MODE = 1;
     jsInterpreter.REGEXP_THREAD_TIMEOUT = 10000;
 
-    var result = jsInterpreter.run();
+    jsInterpreter.run();
+
+    var result = JSON.parse(jsInterpreter.value);
+
+    setResponseStatus(result);
   } catch(e) {
     // response.setValue(e.stack);
     response.replaceRange(e.stack, CodeMirror.Pos(response.lastLine()));
@@ -112,8 +134,7 @@ function runButton() {
   var end = new Date().getTime();
 
   var time = (end - start);
-
-  setResponseStatus();
+  
   setRequestStatus();
 
   $("#time").text("Execution time: " + time + " ms.");
@@ -126,9 +147,13 @@ function resetEditor() {
   $("#request-status").html("");
 }
 
-function setResponseStatus() {
-  if(true) {
-    $("#response-status").html("⚠️ The response should contain Validations node");
+function setResponseStatus(responseContent) {
+  console.log(responseContent);
+
+  response.setValue(JSON.stringify(responseContent, null, 4));
+
+  if(responseContent.success) {
+    $("#response-status").html("✔️");
   } else {
     $("#response-status").html("⚠️");
   }
@@ -153,27 +178,91 @@ function loadSample(id) {
     }
   }
 
-  code.setValue(samples[id].code);
-  request.setValue(samples[id].request);
+  code.setValue(codeSamples[id].code);
+  loadRequestSample('singular');
   
   resetEditor();
 }
 
-var samples = {
+function loadRequestSample(id) {
+  request.setValue(requestSamples[id].code);
+  
+  resetEditor();
+}
+
+var codeSamples = {
   "check-simple": {
-    code: `var data = JSON.parse(getRequest());
+    code: `var result = {success: false};
 
-data.source_string = data.source_string.replace("l", "w");
+source = crowdin.source.replace(/(?:\\r\\n|\\r)/g, '\\n');
+translation = crowdin.translation.replace(/(?:\\r\\n|\\r)/g, '\\n');
+sourceMatch = source.match(/^[ ]+/g);
+translationMatch = translation.match(/^[ ]+/g);
 
-sendReply(JSON.stringify(data));`,
-    request: `{
-  "source_string": "hello world.",
-  "translated_string": "Це пеPеклад"
-}`
+if (null != sourceMatch) {
+    sourceMatch = sourceMatch[0];
+}
+
+if (null != translationMatch) {
+    translationMatch = translationMatch[0];
+}
+
+sourceLeadingSpaces = null !== sourceMatch ? sourceMatch.length : 0;
+translationLeadingSpaces = null !== translationMatch ? translationMatch.length : 0;
+
+if (sourceLeadingSpaces != translationLeadingSpaces) {
+    if (sourceLeadingSpaces == 0) {
+        result.message = 'The source text does not begin with a space, please remove ' + translationLeadingSpaces + ' space(s) at the beginning of your translation.';
+    } else if (translationLeadingSpaces == 0) {
+        result.message = 'The source text begins with ' + sourceLeadingSpaces + ' space(s), please add ' + sourceLeadingSpaces + ' space(s) at the beginning of your translation.';
+    } else {
+        result.message = 'The source text begins with ' + sourceLeadingSpaces + ' space(s), please use the same amount of spaces at the beginning of your translation.';
+    }
+    if (sourceLeadingSpaces > translationLeadingSpaces) {
+        result.fixes = [{
+            from_pos: 0,
+            to_pos: 0,
+            replacement: sourceMatch.slice(0, sourceLeadingSpaces - translationLeadingSpaces)
+        }];
+    } else {
+        result.fixes = [{from_pos: 0, to_pos: translationLeadingSpaces - sourceLeadingSpaces, replacement: ''}];
+    }
+} else {
+    result.success = true;
+}
+
+return result;`
   },
 
-  "check-regex": {
+  "empty": {
     code: ``,
     request: ``
   }
+}
+
+var requestSamples = {
+  "plural": {
+    code: `{
+  "sourceLanguage": "en",
+  "targetLanguage": "ua",
+  "context": {
+    "maxLength": 10,
+    "pluralForm": "many"
+  },
+  "contentType": "application/vnd.crowdin.text+plural",
+  "source": "{\\"one\\":\\"String\\",\\"many\\":\\"Strings\\"}",
+  "translation": "Стрічки"
+}`},
+"singular": {
+  code: `{
+  "sourceLanguage": "en",
+  "targetLanguage": "ua",
+  "context": {
+    "maxLength": 10,
+    "pluralForm": null
+  },
+  "contentType": "application/vnd.crowdin.text+plural",
+  "source": "Strings",
+  "translation": "Стрічки"
+}`}
 }

@@ -29,34 +29,19 @@
 
       <div class="verticalLine"></div>
 
-      <label for="environment" title="Run checks against request, response and the code itself">Environment</label>
-      <select name="environment" id="environment">
-        <option value="qa" selected>QA Check</option>
-        <option value="workflow" disabled>Workflow Step</option>
-        <option value="pre-processorr" disabled>Pre-Import Processor</option>
-        <option value="post-processor" disabled>Post-Export Processor</option>
-        <option value="post-processor" disabled>Custom TM/MT</option>
+      <label for="request-sample" title="Load sample request">Request</label>
+      <select name="request-sample" id="request-sample">
+        <option value="singular" selected>Singular string</option>
+        <option value="plural">Plural string</option>
       </select>
 
       <div class="verticalLine"></div>
 
-      <label for="samples" title="Load sample code to start quickly">Load Sample</label>
+      <label for="samples" title="Load sample code to start quickly">Sample Code</label>
       <select name="samples" id="samples">
         <optgroup label="QA Checks">
           <option value="check-simple" selected>Simple</option>
-          <option value="check-regex" disabled>RegEx check</option>
-        </optgroup>
-        <optgroup label="Workflow Steps" disabled>
-          <option value="simplest-workflow" disabled>Simplest Workflow Step</option>
-          <option value="converter-workflow" disabled>Translation Converter</option>
-        </optgroup>
-        <optgroup label="Pre-Processors" disabled>
-          <option value="custom-csv-csv" disabled>Custom CSV -> JSON</option>
-          <option value="custom-md-md" disabled>Custom Markdown -> Markdown</option>
-        </optgroup>
-        <optgroup label="Post-Processors" disabled>
-          <option value="custom-json-csv" disabled>Custom JSON -> CSV</option>
-          <option value="md-custom-md" disabled>Markdown -> Custom Markdow</option>
+          <option value="empty">Empty</option>
         </optgroup>
       </select>
 
