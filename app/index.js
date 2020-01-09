@@ -79,20 +79,51 @@ function initAlert(interpreter, scope) {
 
   this.setProperty(myConsole, 'log', this.createNativeFunction(wrapper));
 
-  try {
-    var crowdinObject = JSON.parse(request.getValue());
-    setRequestStatus();
-  } catch(e) {
-    setRequestStatus();
-  }
-
-  console.log(crowdinObject);
+  var crowdinObject = JSON.parse(request.getValue());
 
   interpreter.setProperty(scope, 'crowdin', interpreter.nativeToPseudo(crowdinObject));
 }
 
 function runButton() {
   resetEditor();
+
+  try {
+    var crowdinObject = JSON.parse(request.getValue());
+    setRequestStatus(true);
+
+    if(!crowdinObject.hasOwnProperty("sourceLanguage")) {
+      setRequestStatus(false, "`sourceLanguage` property is required in request");
+      return false;
+    }
+
+    if(!crowdinObject.hasOwnProperty("targetLanguage")) {
+      setRequestStatus(false, "`targetLanguage` property is required in request");
+      return false;
+    }
+
+    if(!crowdinObject.hasOwnProperty("context")) {
+      setRequestStatus(false, "`context` property is required in request");
+      return false;
+    }
+
+    if(!crowdinObject.hasOwnProperty("contentType")) {
+      setRequestStatus(false, "`contentType` property is required in request");
+      return false;
+    }
+
+    if(!crowdinObject.hasOwnProperty("source")) {
+      setRequestStatus(false, "`source` property is required in request");
+      return false;
+    }
+
+    if(!crowdinObject.hasOwnProperty("translation")) {
+      setRequestStatus(false, "`translation` property is required in request");
+      return false;
+    }
+  } catch(e) {
+    setRequestStatus(false, "Invalid JSON");
+    return false;
+  }
 
   var src = code.getValue();
   
@@ -134,8 +165,6 @@ function runButton() {
   var end = new Date().getTime();
 
   var time = (end - start);
-  
-  setRequestStatus();
 
   $("#time").text("Execution time: " + time + " ms.");
 }
@@ -148,22 +177,35 @@ function resetEditor() {
 }
 
 function setResponseStatus(responseContent) {
-  console.log(responseContent);
-
   response.setValue(JSON.stringify(responseContent, null, 4));
 
-  if(responseContent.success) {
-    $("#response-status").html("✔️");
+  if(responseContent.hasOwnProperty("success")) {
+    if(responseContent.success == true) {
+      $("#response-status").html("✔️");
+    } else {
+      if(!responseContent.hasOwnProperty("message")) {
+        $("#response-status").html("⚠️ `message` property is required in response");
+        return;
+      }
+
+      if(!responseContent.hasOwnProperty("fixes")) {
+        $("#response-status").html("⚠️ `fixes` property is required in response");          
+        return;
+      }
+
+      $("#response-status").html("✔️");
+    }
+    
   } else {
-    $("#response-status").html("⚠️");
+    $("#response-status").html("⚠️ `success` property is required in response");
   }
 }
 
-function setRequestStatus() {
-  if(true) {
+function setRequestStatus(status, errorMessage) {
+  if(status) {
       $("#request-status").html("✔️");
   } else {
-      $("#request-status").html("⚠️");
+      $("#request-status").html("⚠️ " + errorMessage);
   }
 }
 
