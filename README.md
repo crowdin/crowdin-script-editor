@@ -30,10 +30,6 @@ If you find any problems or would like to suggest a feature, please feel free to
 Need help working with Crowdin Script Editor or have any questions?
 [Contact Customer Success Service](https://crowdin.com/contacts).
 
-### Author
-
-- Serhiy Dmytryshyn (dmytserg@gmail.com)
-
 ### License
 
 <pre>
