@@ -1,4 +1,4 @@
-Script Editor is an open source development debugging tool for custom Crowdin QA Checks.
+Script Editor is an open source development debugging tool for Crowdin custom QA checks.
 
 ## What can Script Editor do?
 * Start quickly with sample QA checks
