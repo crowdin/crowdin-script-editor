@@ -9,10 +9,10 @@ Crowdin Script a JavaScript based scripting language used for Custom Crowdin QA 
 [OPEN EDITOR](https://crowdin.github.io/crowdin-script-editor/)
 
 ## What can Script Editor do?
-* Start quickly with sample QA checks
-* Start quickly with sample requests
+* Start quickly with sample code
+* Test and debug code in different contexts
 * Write Crowdin Script code and have it executed in the save environment as it will have on production
-* Validate the Request and Response whilte coding/debugging
+* Validate the Requests and Responses
 
 ### Contribution
 
