@@ -221,7 +221,7 @@ function loadSample(id) {
   }
 
   code.setValue(codeSamples[id].code);
-  loadRequestSample('singular');
+  loadRequestSample('plain');
   
   resetEditor();
 }
@@ -286,25 +286,33 @@ var requestSamples = {
   "plural": {
     code: `{
   "sourceLanguage": "en",
-  "targetLanguage": "ua",
+  "targetLanguage": "uk",
   "context": {
     "maxLength": 10,
-    "pluralForm": "many"
+    "pluralForm": "one"
   },
   "contentType": "application/vnd.crowdin.text+plural",
-  "source": "{\\"one\\":\\"String\\",\\"many\\":\\"Strings\\"}",
-  "translation": "Стрічки"
+  "source": "{\\"one\\":\\"String\\",\\"other\\":\\"Strings\\"}",
+  "translation": "Рядок"
 }`},
-"singular": {
+"plain": {
   code: `{
   "sourceLanguage": "en",
-  "targetLanguage": "ua",
+  "targetLanguage": "uk",
   "context": {
-    "maxLength": 10,
-    "pluralForm": null
+    "maxLength": 10
   },
-  "contentType": "application/vnd.crowdin.text+plural",
+  "contentType": "text/plain",
   "source": "Strings",
-  "translation": "Стрічки"
+  "translation": "Рядки"
+}`},
+  "icu": {
+    code: `{
+  "sourceLanguage": "en",
+  "targetLanguage": "uk",
+  "context": {},
+  "contentType": "application/vnd.crowdin.text+icu",
+  "source": "{count, plural, one {# String} other {# Strings}}",
+  "translation": "{count, plural, one {# Рядок} few {# Рядків} many {# Рядків} other {# Рядків}}"
 }`}
 }
