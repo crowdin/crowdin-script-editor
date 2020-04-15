@@ -47,6 +47,10 @@ $(function() {
     }
   };
 
+  if(localStorage.getItem('codeId') && localStorage.getItem('codeId').length) {
+    $("#samples").val(localStorage.getItem('codeId'));
+  }
+
   if(localStorage.getItem('code') && localStorage.getItem('code').length) {
     code.setValue(localStorage.getItem('code'));
   } else {
@@ -91,33 +95,40 @@ function runButton() {
     var crowdinObject = JSON.parse(request.getValue());
     setRequestStatus(true);
 
-    if(!crowdinObject.hasOwnProperty("sourceLanguage")) {
-      setRequestStatus(false, "`sourceLanguage` property is required in request");
-      return false;
+    if(localStorage.getItem('requestGroup') === 'CCStep') {
+      if (!crowdinObject.hasOwnProperty("file")) {
+        setRequestStatus(false, "`file` property is required in request");
+        return false;
+      }
+    } else {
+      if (!crowdinObject.hasOwnProperty("sourceLanguage")) {
+        setRequestStatus(false, "`sourceLanguage` property is required in request");
+        return false;
+      }
+
+      if (!crowdinObject.hasOwnProperty("targetLanguage")) {
+        setRequestStatus(false, "`targetLanguage` property is required in request");
+        return false;
+      }
+
+      if(!crowdinObject.hasOwnProperty("translation")) {
+        setRequestStatus(false, "`translation` property is required in request");
+        return false;
+      }
     }
 
-    if(!crowdinObject.hasOwnProperty("targetLanguage")) {
-      setRequestStatus(false, "`targetLanguage` property is required in request");
-      return false;
-    }
-
-    if(!crowdinObject.hasOwnProperty("context")) {
+    if (!crowdinObject.hasOwnProperty("context")) {
       setRequestStatus(false, "`context` property is required in request");
       return false;
     }
 
-    if(!crowdinObject.hasOwnProperty("contentType")) {
+    if (!crowdinObject.hasOwnProperty("contentType")) {
       setRequestStatus(false, "`contentType` property is required in request");
       return false;
     }
 
-    if(!crowdinObject.hasOwnProperty("source")) {
+    if (!crowdinObject.hasOwnProperty("source")) {
       setRequestStatus(false, "`source` property is required in request");
-      return false;
-    }
-
-    if(!crowdinObject.hasOwnProperty("translation")) {
-      setRequestStatus(false, "`translation` property is required in request");
       return false;
     }
   } catch(e) {
@@ -182,7 +193,7 @@ function setResponseStatus(responseContent) {
   if(responseContent.hasOwnProperty("success")) {
     if(responseContent.success == true) {
       $("#response-status").html("✔️");
-    } else {
+    } else if(localStorage.getItem('requestGroup') === 'QACheck') {
       if(!responseContent.hasOwnProperty("message")) {
         $("#response-status").html("⚠️ `message` property is required in response");
         return;
@@ -221,14 +232,19 @@ function loadSample(id) {
   }
 
   code.setValue(codeSamples[id].code);
-  loadRequestSample('plain');
-  
+  localStorage.setItem('codeId', id);
+  loadRequestSample(mapCodeSamplesToGroup[id] + ':plain', true);
   resetEditor();
 }
 
-function loadRequestSample(id) {
+function loadRequestSample(id, withEvent = false) {
   request.setValue(requestSamples[id].code);
-  
+  localStorage.setItem('requestGroup', mapRequestSamplesToGroup[id])
+
+  if (withEvent) {
+    $("#request-sample").val(id).change();
+  }
+
   resetEditor();
 }
 
@@ -275,15 +291,81 @@ if (sourceLeadingSpaces != translationLeadingSpaces) {
 
 return result;`
   },
+  "space-after-punctuation": {
+    code: `/**
+ * Config section
+ * Define the punctuation symbols below
+ */
 
-  "empty": {
+var arrayOfPunctuation = [',','.',':',';','!','?'];
+
+/**
+ * Code section
+ */
+
+var spaceAfterPunctuationPattern = new RegExp('(?<!\\d)(['+arrayOfPunctuation.join('')+'])(?!['+arrayOfPunctuation.join('')+']|['+arrayOfPunctuation.join('')+'\\s\\d])', 'gmu');
+
+var result = {
+  success: false
+};
+
+translation = crowdin.translation;
+
+var translationMatchArray = translation.match(spaceAfterPunctuationPattern);
+
+if (translationMatchArray != null) {
+  result.message = 'The translation text has punctuation without space after.';
+  result.fixes = [];
+
+  while ((matchInfo = spaceAfterPunctuationPattern.exec(translation))) {
+    var fix = {
+      from_pos: matchInfo.index,
+      to_pos: matchInfo.index + matchInfo[0].length,
+      replacement: matchInfo[0]+' '
+    };
+
+    result.fixes.splice(0, 0, fix)
+  }
+} else {
+  result = {
+    success: true
+  }
+}
+
+return result;`
+  },
+  "custom-code-simple": {
+    code: `var result = {success: false};
+if (crowdin.file.branch === 'master') {
+  if (crowdin.context.context.indexOf('backend.string.example') !== -1) {
+    result.success = true;    
+  }
+}
+return result;`
+  },
+    "empty": {
     code: ``,
     request: ``
   }
 }
 
+var mapRequestSamplesToGroup = {
+  'QACheck:plural': 'QACheck',
+  'QACheck:plain': 'QACheck',
+  'QACheck:icu': 'QACheck',
+  'CCStep:plural': 'CCStep',
+  'CCStep:plain': 'CCStep',
+  'CCStep:icu': 'CCStep'
+}
+
+var mapCodeSamplesToGroup = {
+  'check-simple': 'QACheck',
+  'space-after-punctuation': 'QACheck',
+  'custom-code-simple': 'CCStep'
+}
+
 var requestSamples = {
-  "plural": {
+  "QACheck:plural": {
     code: `{
   "sourceLanguage": "en",
   "targetLanguage": "uk",
@@ -295,8 +377,8 @@ var requestSamples = {
   "source": "{\\"one\\":\\"String\\",\\"other\\":\\"Strings\\"}",
   "translation": "Рядок"
 }`},
-"plain": {
-  code: `{
+  "QACheck:plain": {
+    code: `{
   "sourceLanguage": "en",
   "targetLanguage": "uk",
   "context": {
@@ -306,7 +388,7 @@ var requestSamples = {
   "source": "Strings",
   "translation": "Рядки"
 }`},
-  "icu": {
+  "QACheck:icu": {
     code: `{
   "sourceLanguage": "en",
   "targetLanguage": "uk",
@@ -314,5 +396,49 @@ var requestSamples = {
   "contentType": "application/vnd.crowdin.text+icu",
   "source": "{count, plural, one {# String} other {# Strings}}",
   "translation": "{count, plural, one {# Рядок} few {# Рядків} many {# Рядків} other {# Рядків}}"
+}`},
+  "CCStep:plural": {
+    code: `{
+  "file": {
+    "name": "strings.json",
+    "fullName": "backend/strings.json",
+    "branch": "master",
+    "type": "json"
+  },  
+  "context": {
+    "context": "backend.string.example.plural",
+    "maxLength": 10
+  },
+  "contentType": "application/vnd.crowdin.text+plural",
+  "source": "{\\"one\\":\\"String\\",\\"other\\":\\"Strings\\"}"
+}`},
+  "CCStep:plain": {
+    code: `{
+  "file": {
+    "name": "strings.json",
+    "fullName": "backend/strings.json",
+    "branch": "master",
+    "type": "json"
+  },
+  "context": {
+    "context": "backend.string.example.plain",
+    "maxLength": 10
+  },
+  "contentType": "text/plain",
+  "source": "Strings"
+}`},
+  "CCStep:icu": {
+    code: `{
+  "file": {
+    "name": "strings.json",
+    "fullName": "backend/strings.json",
+    "branch": "master",
+    "type": "json"
+  },
+  "context": {
+    "context": "backend.string.example.icu"
+  },
+  "contentType": "application/vnd.crowdin.text+icu",
+  "source": "{count, plural, one {# String} other {# Strings}}"
 }`}
 }
