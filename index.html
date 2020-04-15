@@ -31,9 +31,16 @@
 
       <label for="request-sample" title="Load sample request">Request</label>
       <select name="request-sample" id="request-sample">
-        <option value="plain" selected>Plain string</option>
-        <option value="plural">Plural string</option>
-        <option value="icu">ICU string</option>
+        <optgroup label="QA Checks">
+          <option value="QACheck:plain" selected>Plain string</option>
+          <option value="QACheck:plural">Plural string</option>
+          <option value="QACheck:icu">ICU string</option>
+        </optgroup>
+        <optgroup label="Custom Code Step">
+          <option value="CCStep:plain">Plain string</option>
+          <option value="CCStep:plural">Plural string</option>
+          <option value="CCStep:icu">ICU string</option>
+        </optgroup>
       </select>
 
       <div class="verticalLine"></div>
@@ -42,6 +49,10 @@
       <select name="samples" id="samples">
         <optgroup label="QA Checks">
           <option value="check-simple" selected>Leading spaces</option>
+          <option value="space-after-punctuation">Space after punctuation</option>
+        </optgroup>
+        <optgroup label="Custom Code Step">
+          <option value="custom-code-simple">Filter by branch and context</option>
         </optgroup>
       </select>
 
