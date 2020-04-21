@@ -4,7 +4,7 @@
 
 Crowdin Script Editor is an open source development and debugging tool for Crowdin Script. 
 
-Crowdin Script a JavaScript based scripting language used for Custom Crowdin QA Checks development.
+Crowdin Script is a JavaScript-based scripting language used for the development of the Custom QA Checks and code snippets for the Custom Code workflow step.
 
 [OPEN EDITOR](https://crowdin.github.io/crowdin-script-editor/)
 
