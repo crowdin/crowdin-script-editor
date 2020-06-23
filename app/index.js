@@ -5,8 +5,6 @@ function codeEditorSize() {
 }
 
 $(function() {
-  codeEditorSize();
-  
   $(window).resize(function() {
     codeEditorSize();
   });
@@ -70,6 +68,8 @@ $(function() {
   if(localStorage.getItem('request') && localStorage.getItem('request').length) {
     request.setValue(localStorage.getItem('request'));
   }
+  
+  codeEditorSize();
 });
 
 var jsInterpreter;
