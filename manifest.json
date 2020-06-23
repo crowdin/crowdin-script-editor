@@ -8,8 +8,8 @@
         "clientId": "IE68KZafSAcvrEzDXO7U"
     },
     "events": {
-        "installed": "/crowdin-script-editor/index.html?install",
-        "uninstall": "/crowdin-script-editor/index.html?uninstall"
+        "installed": "https://verbal-tester.crowdin.te.ua/index.php?install",
+        "uninstall": "https://verbal-tester.crowdin.te.ua/index.php?install"
     },
     "scopes": [
         "notification"
