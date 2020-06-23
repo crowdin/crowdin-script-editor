@@ -1,8 +1,14 @@
 var code, request, response;
 
+function codeEditorSize() {
+  $(".CodeMirror-scroll").css("height", $(window).height()-$(".Response").height()-$(".Menu").height()-$(".Footer").height()-10);
+}
+
 $(function() {
+  codeEditorSize();
+  
   $(window).resize(function() {
-    $(".CodeMirror-scroll").css("height", $(window).height()-$(".Response").height()-$(".Menu").height()-$(".Footer").height()-10);
+    codeEditorSize();
   });
   
   $("#samples").change(function() {
