@@ -1,15 +1,15 @@
 {
     "identifier": "code-editor",
     "name": "Script Editor",
-    "logo": "/app/logo.png",
+    "logo": "/crowdin-script-editor/app/logo.png",
     "baseUrl": "https://crowdin.github.io/crowdin-script-editor/",
     "authentication": {
         "type": "authorization_code",
         "clientId": "IE68KZafSAcvrEzDXO7U"
     },
     "events": {
-        "installed": "/index.html?install",
-        "uninstall": "/index.html?uninstall"
+        "installed": "/crowdin-script-editor/index.html?install",
+        "uninstall": "/crowdin-script-editor/index.html?uninstall"
     },
     "scopes": [
         "notification"
@@ -20,8 +20,8 @@
                 "key": "code-editor",
                 "name": "Script Editor",
                 "description": "Script Editor is a development and debugging tool for Crowdin Script",
-                "logo": "/app/logo.png",
-                "url": "/"
+                "logo": "/crowdin-script-editor/app/logo.png",
+                "url": "/crowdin-script-editor/"
             }
         ]
     }
