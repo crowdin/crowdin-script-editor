@@ -2,7 +2,7 @@
     "identifier": "code-editor",
     "name": "Script Editor",
     "logo": "/crowdin-script-editor/app/logo.png",
-    "baseUrl": "https://crowdin.github.io/crowdin-script-editor/",
+    "baseUrl": "https://crowdin.github.io/",
     "authentication": {
         "type": "authorization_code",
         "clientId": "IE68KZafSAcvrEzDXO7U"
