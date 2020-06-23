@@ -1,6 +1,10 @@
 var code, request, response;
 
 $(function() {
+  $(window).resize(function() {
+    $(".CodeMirror-scroll").css("height", $(window).height()-$(".Response").height()-$(".Menu").height()-$(".Footer").height()-10);
+  });
+  
   $("#samples").change(function() {
     loadSample(this.value);
   });
