@@ -33,8 +33,6 @@ Need help working with Crowdin Script Editor or have any questions?
 ### License
 
 <pre>
-Copyright © 2020 Crowdin
-
 The Crowdin Script Editor is licensed under the MIT License.
 See the LICENSE file distributed with this work for additional
 information regarding copyright ownership.
