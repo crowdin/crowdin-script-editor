@@ -413,12 +413,16 @@ var requestSamples = {
     "name": "strings.json",
     "fullName": "backend/strings.json",
     "branch": "master",
-    "type": "json"
+    "type": "json",
+    "title": "title file"
   },  
   "context": {
     "context": "backend.string.example.plural",
     "maxLength": 10
   },
+  "labels": [
+    "Translate by Vendor"    
+  ],
   "contentType": "application/vnd.crowdin.text+plural",
   "source": "{\\"one\\":\\"String\\",\\"other\\":\\"Strings\\"}"
 }`},
@@ -428,8 +432,12 @@ var requestSamples = {
     "name": "strings.json",
     "fullName": "backend/strings.json",
     "branch": "master",
-    "type": "json"
+    "type": "json",
+    "title": "title file"
   },
+  "labels": [
+    "Translate by Vendor"    
+  ],
   "context": {
     "context": "backend.string.example.plain",
     "maxLength": 10
@@ -443,11 +451,15 @@ var requestSamples = {
     "name": "strings.json",
     "fullName": "backend/strings.json",
     "branch": "master",
-    "type": "json"
+    "type": "json",
+    "title": "title file"
   },
   "context": {
     "context": "backend.string.example.icu"
   },
+  "labels": [
+    "Translate by Vendor"    
+  ],
   "contentType": "application/vnd.crowdin.text+icu",
   "source": "{count, plural, one {# String} other {# Strings}}"
 }`}
