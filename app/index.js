@@ -346,7 +346,7 @@ return result;`
   },
   "custom-code-simple": {
     code: `var result = {success: false};
-if (crowdin.file.branch === 'master') {
+if (crowdin.file.branchName === 'master') {
   if (crowdin.context.context.indexOf('backend.string.example') !== -1) {
     result.success = true;    
   }
@@ -412,55 +412,113 @@ var requestSamples = {
   "file": {
     "name": "strings.json",
     "fullName": "backend/strings.json",
-    "branch": "master",
+    "branchName": "master",
     "type": "json",
     "title": "title file"
-  },  
+  },
   "context": {
     "context": "backend.string.example.plural",
+    "identifier": "common.strings",
     "maxLength": 10
   },
   "labels": [
-    "Translate by Vendor"    
+    "Translate by Vendor"
   ],
   "contentType": "application/vnd.crowdin.text+plural",
-  "source": "{\\"one\\":\\"String\\",\\"other\\":\\"Strings\\"}"
+  "source": "{\\"one\\":\\"String\\",\\"other\\":\\"Strings\\"}",
+  "string": {
+    "id": 1,
+    "key": "common.plural.strings",
+    "context": "backend.string.example.plural",
+    "maxLength": 10,
+    "createdAt": "2025-10-21T19:14:40+00:00",
+    "updatedAt": "2025-10-21T19:14:40+00:00",
+    "text": "{\\"one\\":\\"String\\",\\"other\\":\\"Strings\\"}",
+    "fields": {
+      "some-field-1": "some value 1",
+      "some-field-2": 12,
+      "some-field-3": true,
+      "some-field-4": [
+        "en",
+        "ja"
+      ]
+    }
+  }
 }`},
   "CCStep:plain": {
     code: `{
   "file": {
     "name": "strings.json",
     "fullName": "backend/strings.json",
-    "branch": "master",
+    "branchName": "master",
     "type": "json",
     "title": "title file"
   },
-  "labels": [
-    "Translate by Vendor"    
-  ],
   "context": {
     "context": "backend.string.example.plain",
+    "identifier": "common.strings",
     "maxLength": 10
   },
+  "labels": [
+    "Translate by Vendor"
+  ],
   "contentType": "text/plain",
-  "source": "Strings"
+  "source": "Strings",
+  "string": {
+    "id": 1,
+    "key": "common.plain.strings",
+    "context": "backend.string.example.plain",
+    "maxLength": 10,
+    "createdAt": "2025-10-21T19:14:40+00:00",
+    "updatedAt": "2025-10-21T19:14:40+00:00",
+    "text": "Strings",
+    "fields": {
+      "some-field-1": "some value 1",
+      "some-field-2": 12,
+      "some-field-3": true,
+      "some-field-4": [
+        "en",
+        "ja"
+      ]
+    }
+  }
 }`},
   "CCStep:icu": {
     code: `{
   "file": {
     "name": "strings.json",
     "fullName": "backend/strings.json",
-    "branch": "master",
+    "branchName": "master",
     "type": "json",
     "title": "title file"
   },
   "context": {
-    "context": "backend.string.example.icu"
+    "context": "backend.string.example.icu",
+    "identifier": "common.strings",
+    "maxLength": 10
   },
   "labels": [
-    "Translate by Vendor"    
+    "Translate by Vendor"
   ],
   "contentType": "application/vnd.crowdin.text+icu",
-  "source": "{count, plural, one {# String} other {# Strings}}"
+  "source": "{count, plural, one {# String} other {# Strings}}",
+  "string": {
+    "id": 1,
+    "key": "common.strings",
+    "context": "backend.string.example.icu",
+    "maxLength": 10,
+    "createdAt": "2025-10-21T19:14:40+00:00",
+    "updatedAt": "2025-10-21T19:14:40+00:00",
+    "text": "{count, plural, one {# String} other {# Strings}}",
+    "fields": {
+      "some-field-1": "some value 1",
+      "some-field-2": 12,
+      "some-field-3": true,
+      "some-field-4": [
+        "en",
+        "ja"
+      ]
+    }
+  }
 }`}
 }
