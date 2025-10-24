@@ -55,10 +55,6 @@ textarea {
   grid-area: Request;
 }
 
-.Request .CodeMirror {
-  height: calc(100% - 35px);
-}
-
 .Request .CodeMirror-scroll {
   height: 100%;
 }
@@ -66,10 +62,6 @@ textarea {
 .Response { 
   grid-area: Response;
   border-left: 1px #ddd solid ;
-}
-
-.Response .CodeMirror {
-  height: calc(100% - 35px);
 }
 
 .Response .CodeMirror-scroll {
